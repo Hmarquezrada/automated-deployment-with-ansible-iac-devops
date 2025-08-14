@@ -40,14 +40,14 @@ flowchart LR
         B1[Construcción: Dockerfile + Docker Compose + Código]
         X[Commit y Push en Git]
         E[Repositorio Git con Código y Configuración]
-        F[Ansible - Playbook de Despliegue Local]
+        F[Ansible Playbook: Despliegue + Llamada a AWS IAM para inyectar keys, variables y secretos en la imagen Docker]
     end
 
-    subgraph APP[Aplicación en Producción]
+    subgraph APP[Aplicación en Producción - Corre en Docker en EC2 App-SECOP]
         A[Next.js App]
         D[API Interna: endpoint api/licitaciones]
         B[Supabase: Auth y Base de Datos]
-        C["AWS IAM: Acceso seguro al panel de visualización - Dashboard"]
+        C["AWS IAM: Acceso seguro y credenciales inyectadas en la imagen durante la construcción"]
         S[API SECOP: Datos Públicos]
     end
 
@@ -75,7 +75,7 @@ flowchart LR
     D --> S
     A --> C
     C --> B
-    B -- "Token válido / Sesión iniciada" --> A
+    F --> C
 
     %% Portainer local
     G --> PK
