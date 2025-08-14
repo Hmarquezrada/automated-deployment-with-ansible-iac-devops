@@ -4,8 +4,8 @@
   become: yes
   vars:
     secret_arn: "arn:aws:secretsmanager:us-east-1:290059794118:secret:prod-secop-uGe1Bk"
-    project_path: "/opt/secop-licitaciones-datatable"
-    repo_url: "https://github.com/Hmarquezrada/Automated-deployment-with-Ansible-IaC-DevOps.git"
+    project_path: "/opt/automated-deployment-with-ansible-ac-devops"
+    repo_url: "https://github.com/Hmarquezrada/automated-deployment-with-Ansible-IaC.git"
 
   tasks:
     - name: Instalar dependencias necesarias
