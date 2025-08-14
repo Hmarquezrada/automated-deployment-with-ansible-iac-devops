@@ -1,14 +1,14 @@
 ---
-- name: Despliegue aplicación Next.js con secretos AWS - App-SECOP-datatable
+- name: despliegue aplicación next.js con secretos aws - app-secop
   hosts: produccion
   become: yes
   vars:
     secret_arn: "arn:aws:secretsmanager:us-east-1:290059794118:secret:prod-secop-uGe1Bk"
-    project_path: "/opt/automated-deployment-with-ansible-ac-devops"
+    project_path: "/opt/secop-licitaciones-datatable"
     repo_url: "https://github.com/Hmarquezrada/automated-deployment-with-ansible-iac-devops.git"
 
   tasks:
-    - name: Instalar dependencias necesarias
+    - name: instalar dependencias necesarias
       apt:
         name:
           - git
@@ -20,7 +20,13 @@
         state: present
         update_cache: yes
 
-    - name: Crear carpeta del proyecto
+    - name: detectar rama principal del repositorio
+      shell: |
+        git ls-remote --symref {{ repo_url }} HEAD | grep 'ref:' | awk '{print $2}' | sed 's/refs\/heads\///'
+      register: branch_name
+      changed_when: false
+
+    - name: crear carpeta del proyecto
       file:
         path: "{{ project_path }}"
         state: directory
@@ -28,14 +34,14 @@
         group: ubuntu
         mode: '0755'
 
-    - name: Clonar o actualizar repositorio
+    - name: clonar o actualizar repositorio
       git:
         repo: "{{ repo_url }}"
         dest: "{{ project_path }}"
-        version: main
+        version: "{{ branch_name.stdout }}"
         force: yes
 
-    - name: Obtener secreto desde AWS Secrets Manager
+    - name: obtener secreto desde aws secrets manager
       command: >
         aws secretsmanager get-secret-value
         --secret-id {{ secret_arn }}
@@ -43,11 +49,11 @@
         --output text
       register: secreto_json
 
-    - name: Convertir secreto JSON a diccionario
+    - name: convertir secreto json a diccionario
       set_fact:
         secret_data: "{{ secreto_json.stdout | from_json }}"
 
-    - name: Generar archivo .env sin problemas de comillas
+    - name: generar archivo .env sin problemas de comillas
       copy:
         dest: "{{ project_path }}/.env"
         content: |
@@ -55,14 +61,14 @@
           {{ k }}={{ v }}
           {% endfor %}
 
-    - name: Mostrar variables .env obtenidas
+    - name: mostrar variables .env obtenidas
       shell: cat {{ project_path }}/.env
       register: env_content
 
     - debug:
         msg: "{{ env_content.stdout_lines }}"
 
-    - name: Construir y levantar contenedor
+    - name: construir y levantar contenedor
       shell: |
         cd {{ project_path }}
         docker-compose build --no-cache
