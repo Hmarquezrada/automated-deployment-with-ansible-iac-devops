@@ -5,7 +5,7 @@
   vars:
     secret_arn: "arn:aws:secretsmanager:us-east-1:290059794118:secret:prod-secop-uGe1Bk"
     project_path: "/opt/automated-deployment-with-ansible-ac-devops"
-    repo_url: "https://github.com/Hmarquezrada/automated-deployment-with-Ansible-IaC.git"
+    repo_url: "https://github.com/Hmarquezrada/automated-deployment-with-ansible-iac-devops.git"
 
   tasks:
     - name: Instalar dependencias necesarias
