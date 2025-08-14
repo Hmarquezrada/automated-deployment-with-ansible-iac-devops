@@ -47,13 +47,12 @@ flowchart LR
         A[Next.js App]
         D[API Interna: endpoint api/licitaciones]
         B[Supabase: Auth y Base de Datos]
-        C[AWS IAM: Secrets]
+        C[AWS IAM: Acceso seguro al panel de visualización (Dashboard)]
         S[API SECOP: Datos Públicos]
     end
 
-    subgraph INFRA[Infraestructura y Monitoreo]
+    subgraph INFRA[Infraestructura]
         G[EC2 App-SECOP + Docker: App desplegada]
-        H[Grafana + Prometheus: Monitoreo]
         PK[Portainer: Gestión local de contenedores en EC2 App-SECOP]
         UK[Uptime Kuma: Monitoreo remoto de EC2 App-SECOP]
         G2[EC2 Uptime Kuma]
@@ -89,8 +88,6 @@ flowchart LR
     P --> G
     P --> G2
 
-    %% Monitoreo adicional
-    G --> H
 
 
 
