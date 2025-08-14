@@ -36,59 +36,83 @@ Sistema web para consulta y análisis de licitaciones públicas del SECOP (Siste
 
 ```mermaid
 flowchart LR
-    subgraph DEV[Desarrollo y Preparacion]
-        B1[Construccion: Dockerfile + Docker Compose + Codigo]
+    %% =========================
+    %% BLOQUE 1: Desarrollo y Despliegue
+    %% =========================
+    subgraph DEV[Desarrollo y Preparación]
+        B1[Construcción: Dockerfile + Docker Compose + Código]
         X[Commit y Push en Git]
-        E[Repositorio Git con Codigo y Configuracion]
-        F["Ansible - Playbook de Despliegue Local\n-> Inyeccion de variables, claves y secretos via AWS IAM"]
+        E[Repositorio Git con Código y Configuración]
+        F["Ansible - Playbook de Despliegue Local
+        -> Inyección de variables, llaves y secretos vía AWS IAM (cadena conexión Supabase)"]
     end
 
-    subgraph APP[Aplicacion en Produccion Docker]
+    %% =========================
+    %% BLOQUE 2: Aplicación en Producción
+    %% =========================
+    subgraph APP[Aplicación en Producción (Docker)]
         subgraph DOCKER[Contenedor Docker]
-            A["Next.js App\n(AppNext/auth y AppNext/Dashboard)"]
-            D[API Interna: endpoint api/licitaciones]
-            C["AWS IAM (inyecta keys y secretos en la imagen durante build)"]
-            B[Supabase: Auth y Base de Datos]
+            subgraph FLOW[Flujo interno de la App]
+                U[Actor]
+                PWD[Password]
+                AUTH[AppNext/auth]
+                DB[(DB Supabase)]
+                TOKEN[Token válido inicio]
+                DASH[AppNext/Dashboard]
+                API1[API scope datos públicos]
+                API2[API externa]
+
+                %% Flujo de autenticación
+                U --> PWD --> AUTH
+                AUTH --> DB
+                DB --> TOKEN --> DASH
+                DASH --> API1
+                DASH --> API2
+                API1 --> API2
+                %% Actor vuelve a interactuar con Dashboard
+                U --> DASH
+            end
+
+            %% AWS IAM en build
+            IAM[AWS IAM: Inyecta cadena conexión Supabase y secretos]
+            IAM --> AUTH
         end
-        S[API SECOP: Datos Publicos]
     end
 
+    %% =========================
+    %% BLOQUE 3: Infraestructura
+    %% =========================
     subgraph INFRA[Infraestructura]
         G[EC2 App-SECOP + Docker: App desplegada]
-        PK[Portainer: Gestion local de contenedores en EC2 App-SECOP]
+        PK[Portainer: Gestión local de contenedores en EC2 App-SECOP]
         UK[Uptime Kuma: Monitoreo remoto de EC2 App-SECOP]
         G2[EC2 Uptime Kuma]
     end
 
+    %% =========================
+    %% BLOQUE 4: Seguridad
+    %% =========================
     subgraph SECURITY[Seguridad y Control de Acceso]
-        SG[Grupos de Seguridad AWS: Reglas de entrada/salida]
-        P[Puertos habilitados -> 80 HTTP, 443 HTTPS, 3000 App, 9000 Portainer, 3001 Kuma]
+        SG[Grupos de Seguridad AWS: Reglas entrada/salida]
+        P[Puertos: 80 HTTP, 443 HTTPS, 3000 App, 9000 Portainer, 3001 Kuma]
     end
 
-    %% Flujo de construccion y despliegue
+    %% =========================
+    %% Relaciones
+    %% =========================
     B1 --> X
     X --> E
     E --> F
     F --> G
 
-    %% Conexiones de la App en Docker
-    G --> A
-    A --> D
-    D --> S
-    A --> C
-    C --> B
-
-    %% Portainer local
+    G --> DOCKER
     G --> PK
+    G2 --> UK --> G
 
-    %% Uptime Kuma en EC2 separada
-    G2 --> UK
-    UK --> G
-
-    %% Seguridad
     SG --> P
     P --> G
     P --> G2
+
 
 
 
