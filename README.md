@@ -41,10 +41,10 @@ flowchart LR
     %% =========================
     subgraph DEV["Desarrollo y Construccion"]
         B1[Dockerfile + Docker Compose + Codigo]
-        IAM[AWS IAM: Inyeccion de variables, llaves y secretos (cadena conexion Supabase) en build]
+        IAM[AWS IAM - Inyeccion de variables, llaves y secretos - cadena conexion Supabase en build]
         X[Commit y Push en Git]
         E[Repositorio Git con Codigo y Configuracion]
-        F["Ansible - Playbook de Despliegue Local -> Construye imagen con secretos embebidos"]
+        F[Ansible - Playbook de Despliegue Local -> Construye imagen con secretos embebidos]
         
         B1 --> IAM
         IAM --> X
@@ -110,6 +110,7 @@ flowchart LR
     SG --> P
     P --> G
     P --> G2
+
 
 
 
