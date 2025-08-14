@@ -75,6 +75,7 @@ flowchart LR
     D --> S
     A --> C
     C --> B
+    B -- "Token válido / Sesión iniciada" --> A
 
     %% Portainer local
     G --> PK
@@ -87,6 +88,7 @@ flowchart LR
     SG --> P
     P --> G
     P --> G2
+
 ```
 
 ---
