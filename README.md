@@ -47,7 +47,7 @@ flowchart LR
         A[Next.js App]
         D[API Interna: endpoint api/licitaciones]
         B[Supabase: Auth y Base de Datos]
-        C[AWS IAM: Acceso seguro al panel de visualización (Dashboard)]
+        C["AWS IAM: Acceso seguro al panel de visualización - Dashboard"]
         S[API SECOP: Datos Públicos]
     end
 
@@ -87,6 +87,7 @@ flowchart LR
     SG --> P
     P --> G
     P --> G2
+
 
 
 
