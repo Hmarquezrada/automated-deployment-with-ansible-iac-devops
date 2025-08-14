@@ -39,44 +39,35 @@ flowchart LR
     %% =========================
     %% BLOQUE 1: Desarrollo y Construccion
     %% =========================
-    subgraph DEV["Desarrollo y Construccion"]
-        B1[Dockerfile + Docker Compose + Codigo]
-        IAM[AWS IAM - Inyeccion de variables, llaves y secretos - cadena conexion Supabase en build]
-        X[Commit y Push en Git]
-        E[Repositorio Git con Codigo y Configuracion]
-        F[Ansible - Playbook de Despliegue Local -> Construye imagen con secretos embebidos]
+    subgraph DEV["Desarrollo y Construcción"]
+        B1[Construcción Deploy: Docker + Compose + Código]
+        X[Commit y Push en Git (Repositorio listo para despliegue)]
+        F[Ansible - Playbook de Despliegue por SSH a EC2 -> Construye imagen con secretos embebidos]
+        IAM[AWS IAM - Inyección de variables, llaves y secretos - cadena conexión Supabase en build]
         
-        B1 --> IAM
-        IAM --> X
-        X --> E
-        E --> F
+        B1 --> X
+        X --> F
+        IAM --> F
     end
 
     %% =========================
-    %% BLOQUE 2: Aplicacion en Produccion
+    %% BLOQUE 2: Aplicación en Producción
     %% =========================
-    subgraph APP["Aplicacion en Produccion - Docker"]
-        subgraph DOCKER["Contenedor Docker (con claves embebidas)"]
-            subgraph FLOW["Flujo interno de la App"]
-                U[Actor]
-                PWD[Password]
-                AUTH[AppNext/auth]
-                DB[(DB Supabase)]
-                TOKEN[Token valido inicio]
-                DASH[AppNext/Dashboard]
-                API1[API publica]
-                API2[API externa]
+    subgraph APP["Aplicación en Producción"]
+        CLIENTE[Cliente (fuera de Docker)]
+        
+        subgraph DOCKER["Contenedor Docker (App con claves embebidas)"]
+            PASS[Password ingresado por cliente]
+            DB[(Base de Datos Supabase)]
+            TOKEN[Token válido]
+            DASH[Dashboard]
+            APIEXT[API externa SECOP]
 
-                %% Flujo de autenticacion
-                U --> PWD --> AUTH
-                AUTH --> DB
-                DB --> TOKEN --> DASH
-                DASH --> API1
-                DASH --> API2
-                API1 --> API2
-                %% Actor vuelve a interactuar con Dashboard
-                U --> DASH
-            end
+            CLIENTE --> PASS
+            PASS --> DB
+            DB --> TOKEN
+            TOKEN --> DASH
+            DASH --> APIEXT
         end
     end
 
@@ -84,32 +75,33 @@ flowchart LR
     %% BLOQUE 3: Infraestructura
     %% =========================
     subgraph INFRA["Infraestructura"]
-        G[EC2 App-SECOP + Docker: App desplegada]
-        PK[Portainer: Gestion local de contenedores en EC2 App-SECOP]
-        UK[Uptime Kuma: Monitoreo remoto de EC2 App-SECOP]
-        G2[EC2 Uptime Kuma]
+        EC2_APP[EC2 con Portainer + App]
+        EC2_KUMA[EC2 con Uptime Kuma]
+
+        PORTAINER[Portainer: Gestión de contenedores y métricas de la App en Docker]
+        KUMA[Uptime Kuma: Verifica latencia y disponibilidad del servidor de la App]
+
+        EC2_APP --> PORTAINER
+        EC2_KUMA --> KUMA
     end
 
     %% =========================
     %% BLOQUE 4: Seguridad
     %% =========================
     subgraph SECURITY["Seguridad y Control de Acceso"]
-        SG[Grupos de Seguridad AWS: Reglas entrada/salida]
-        P[Puertos: 80 HTTP, 443 HTTPS, 3000 App, 9000 Portainer, 3001 Kuma]
+        SG[Grupos de seguridad AWS: Reglas entrada/salida]
     end
 
     %% =========================
     %% Relaciones
     %% =========================
-    F --> G
+    F --> EC2_APP
+    EC2_APP --> DOCKER
+    EC2_KUMA --> EC2_APP
 
-    G --> DOCKER
-    G --> PK
-    G2 --> UK --> G
+    SG --> EC2_APP
+    SG --> EC2_KUMA
 
-    SG --> P
-    P --> G
-    P --> G2
 
 
 
