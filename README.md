@@ -37,13 +37,13 @@ Sistema web para consulta y análisis de licitaciones públicas del SECOP (Siste
 ```mermaid
 flowchart LR
     %% =========================
-    %% BLOQUE 1: Desarrollo y Construcción
+    %% BLOQUE 1: Desarrollo y Construccion
     %% =========================
-    subgraph DEV["Desarrollo y Construcción"]
-        B1[Dockerfile + Docker Compose + Código]
-        IAM[AWS IAM: Inyección de variables, llaves y secretos (cadena conexión Supabase) en build]
+    subgraph DEV["Desarrollo y Construccion"]
+        B1[Dockerfile + Docker Compose + Codigo]
+        IAM[AWS IAM: Inyeccion de variables, llaves y secretos (cadena conexion Supabase) en build]
         X[Commit y Push en Git]
-        E[Repositorio Git con Código y Configuración]
+        E[Repositorio Git con Codigo y Configuracion]
         F["Ansible - Playbook de Despliegue Local -> Construye imagen con secretos embebidos"]
         
         B1 --> IAM
@@ -53,21 +53,21 @@ flowchart LR
     end
 
     %% =========================
-    %% BLOQUE 2: Aplicación en Producción
+    %% BLOQUE 2: Aplicacion en Produccion
     %% =========================
-    subgraph APP["Aplicación en Producción - Docker"]
+    subgraph APP["Aplicacion en Produccion - Docker"]
         subgraph DOCKER["Contenedor Docker (con claves embebidas)"]
             subgraph FLOW["Flujo interno de la App"]
                 U[Actor]
                 PWD[Password]
                 AUTH[AppNext/auth]
                 DB[(DB Supabase)]
-                TOKEN[Token válido inicio]
+                TOKEN[Token valido inicio]
                 DASH[AppNext/Dashboard]
-                API1[API pública]
+                API1[API publica]
                 API2[API externa]
 
-                %% Flujo de autenticación
+                %% Flujo de autenticacion
                 U --> PWD --> AUTH
                 AUTH --> DB
                 DB --> TOKEN --> DASH
@@ -85,7 +85,7 @@ flowchart LR
     %% =========================
     subgraph INFRA["Infraestructura"]
         G[EC2 App-SECOP + Docker: App desplegada]
-        PK[Portainer: Gestión local de contenedores en EC2 App-SECOP]
+        PK[Portainer: Gestion local de contenedores en EC2 App-SECOP]
         UK[Uptime Kuma: Monitoreo remoto de EC2 App-SECOP]
         G2[EC2 Uptime Kuma]
     end
@@ -110,6 +110,7 @@ flowchart LR
     SG --> P
     P --> G
     P --> G2
+
 
 
 ```
