@@ -36,7 +36,6 @@ Sistema web para consulta y análisis de licitaciones públicas del SECOP (Siste
 
 ```mermaid
 flowchart LR
-    flowchart LR
     %% =========================
     %% BLOQUE 1: Desarrollo y Construccion
     %% =========================
@@ -102,6 +101,7 @@ flowchart LR
 
     SG --> EC2_APP
     SG --> EC2_KUMA
+
 
 
 ```
