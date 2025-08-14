@@ -169,12 +169,15 @@ secop-consultas-next/
 
 ---
 
-## Monitoreo con Uptime Kuma
+## Monitoreo y Gestión de Contenedores
 
-- Monitoreo de disponibilidad y latencia de la **EC2 App-SECOP**.  
-- Notificaciones instantáneas a **Telegram** en caso de caída.  
-- Métricas históricas para análisis de uptime.  
-
+- Uptime Kuma (en EC2 separada) para monitorear la disponibilidad y tiempo de respuesta de la aplicación desplegada en la EC2 App-SECOP.
+- Alertas en tiempo real vía Telegram cuando el servicio no responde o presenta alta latencia.
+- Portainer (instalado dentro de la EC2 de la App-SECOP) para administración local de contenedores Docker:
+Visualizar contenedores activos.
+Detener, reiniciar o eliminar contenedores.
+Revisar logs y métricas básicas.
+- Acceso a través del puerto 9000 protegido por credenciales.
 ---
 
 ## Despliegue en AWS
