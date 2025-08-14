@@ -52,13 +52,16 @@ flowchart LR
     end
 
     subgraph INFRA[Infraestructura y Monitoreo]
-        G[EC2 + Docker: App desplegada]
+        G[EC2 App-SECOP + Docker: App desplegada]
         H[Grafana + Prometheus: Monitoreo]
+        PK[Portainer: Gestión local de contenedores en EC2 App-SECOP]
+        UK[Uptime Kuma: Monitoreo remoto de EC2 App-SECOP]
+        G2[EC2 Uptime Kuma]
     end
 
     subgraph SECURITY[Seguridad y Control de Acceso]
         SG[Grupos de Seguridad AWS: Reglas de entrada/salida]
-        P[Puertos habilitados -> 80 HTTP, 443 HTTPS, 3000 App]
+        P[Puertos habilitados -> 80 HTTP, 443 HTTPS, 3000 App, 9000 Portainer, 3001 Kuma]
     end
 
     %% Flujo de construcción y despliegue
@@ -74,12 +77,21 @@ flowchart LR
     A --> C
     C --> B
 
+    %% Portainer local
+    G --> PK
+
+    %% Uptime Kuma en EC2 separada
+    G2 --> UK
+    UK --> G
+
     %% Seguridad
     SG --> P
     P --> G
+    P --> G2
 
-    %% Monitoreo
+    %% Monitoreo adicional
     G --> H
+
 
 
 
