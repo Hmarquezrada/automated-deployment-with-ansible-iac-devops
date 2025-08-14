@@ -36,26 +36,26 @@ Sistema web para consulta y análisis de licitaciones públicas del SECOP (Siste
 
 ```mermaid
 flowchart LR
-    subgraph DEV[Desarrollo y Preparación]
-        B1[Construcción: Dockerfile + Docker Compose + Código]
+    subgraph DEV[Desarrollo y Preparacion]
+        B1[Construccion: Dockerfile + Docker Compose + Codigo]
         X[Commit y Push en Git]
-        E[Repositorio Git con Código y Configuración]
-        F[Ansible - Playbook de Despliegue Local\n→ Inyección de variables, claves y secretos vía AWS IAM]
+        E[Repositorio Git con Codigo y Configuracion]
+        F["Ansible - Playbook de Despliegue Local\n→ Inyeccion de variables, claves y secretos via AWS IAM"]
     end
 
-    subgraph APP[Aplicación en Producción (Docker)]
+    subgraph APP[Aplicacion en Produccion (Docker)]
         subgraph DOCKER[Contenedor Docker]
-            A[Next.js App\n(AppNext/auth y AppNext/Dashboard)]
+            A["Next.js App\n(AppNext/auth y AppNext/Dashboard)"]
             D[API Interna: endpoint api/licitaciones]
             C["AWS IAM (inyecta keys y secretos en la imagen durante build)"]
             B[Supabase: Auth y Base de Datos]
         end
-        S[API SECOP: Datos Públicos]
+        S[API SECOP: Datos Publicos]
     end
 
     subgraph INFRA[Infraestructura]
         G[EC2 App-SECOP + Docker: App desplegada]
-        PK[Portainer: Gestión local de contenedores en EC2 App-SECOP]
+        PK[Portainer: Gestion local de contenedores en EC2 App-SECOP]
         UK[Uptime Kuma: Monitoreo remoto de EC2 App-SECOP]
         G2[EC2 Uptime Kuma]
     end
@@ -65,7 +65,7 @@ flowchart LR
         P[Puertos habilitados -> 80 HTTP, 443 HTTPS, 3000 App, 9000 Portainer, 3001 Kuma]
     end
 
-    %% Flujo de construcción y despliegue
+    %% Flujo de construccion y despliegue
     B1 --> X
     X --> E
     E --> F
@@ -89,6 +89,7 @@ flowchart LR
     SG --> P
     P --> G
     P --> G2
+
 
 
 ```
