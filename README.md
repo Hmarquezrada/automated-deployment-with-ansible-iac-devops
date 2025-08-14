@@ -36,14 +36,15 @@ Sistema web para consulta y análisis de licitaciones públicas del SECOP (Siste
 
 ```mermaid
 flowchart LR
+    flowchart LR
     %% =========================
     %% BLOQUE 1: Desarrollo y Construccion
     %% =========================
-    subgraph DEV["Desarrollo y Construcción"]
-        B1[Construcción Deploy: Docker + Compose + Código]
-        X[Commit y Push en Git (Repositorio listo para despliegue)]
+    subgraph DEV["Desarrollo y Construccion"]
+        B1[Construccion Deploy - Docker + Compose + Codigo]
+        X[Commit y Push en Git - Repositorio listo para despliegue]
         F[Ansible - Playbook de Despliegue por SSH a EC2 -> Construye imagen con secretos embebidos]
-        IAM[AWS IAM - Inyección de variables, llaves y secretos - cadena conexión Supabase en build]
+        IAM[AWS IAM - Inyeccion de variables, llaves y secretos - cadena conexion Supabase en build]
         
         B1 --> X
         X --> F
@@ -51,15 +52,15 @@ flowchart LR
     end
 
     %% =========================
-    %% BLOQUE 2: Aplicación en Producción
+    %% BLOQUE 2: Aplicacion en Produccion
     %% =========================
-    subgraph APP["Aplicación en Producción"]
-        CLIENTE[Cliente (fuera de Docker)]
+    subgraph APP["Aplicacion en Produccion"]
+        CLIENTE[Cliente - fuera de Docker]
         
-        subgraph DOCKER["Contenedor Docker (App con claves embebidas)"]
+        subgraph DOCKER["Contenedor Docker - App con claves embebidas"]
             PASS[Password ingresado por cliente]
             DB[(Base de Datos Supabase)]
-            TOKEN[Token válido]
+            TOKEN[Token valido]
             DASH[Dashboard]
             APIEXT[API externa SECOP]
 
@@ -75,11 +76,11 @@ flowchart LR
     %% BLOQUE 3: Infraestructura
     %% =========================
     subgraph INFRA["Infraestructura"]
-        EC2_APP[EC2 con Portainer + App]
+        EC2_APP[EC2 con Portainer y App]
         EC2_KUMA[EC2 con Uptime Kuma]
 
-        PORTAINER[Portainer: Gestión de contenedores y métricas de la App en Docker]
-        KUMA[Uptime Kuma: Verifica latencia y disponibilidad del servidor de la App]
+        PORTAINER[Portainer - Gestion de contenedores y metricas de la App en Docker]
+        KUMA[Uptime Kuma - Verifica latencia y disponibilidad del servidor de la App]
 
         EC2_APP --> PORTAINER
         EC2_KUMA --> KUMA
@@ -89,7 +90,7 @@ flowchart LR
     %% BLOQUE 4: Seguridad
     %% =========================
     subgraph SECURITY["Seguridad y Control de Acceso"]
-        SG[Grupos de seguridad AWS: Reglas entrada/salida]
+        SG[Grupos de seguridad AWS - Reglas entrada y salida]
     end
 
     %% =========================
@@ -101,9 +102,6 @@ flowchart LR
 
     SG --> EC2_APP
     SG --> EC2_KUMA
-
-
-
 
 
 ```
