@@ -43,7 +43,7 @@ flowchart LR
         F["Ansible - Playbook de Despliegue Local\n-> Inyeccion de variables, claves y secretos via AWS IAM"]
     end
 
-    subgraph APP[Aplicacion en Produccion (Docker)]
+    subgraph APP[Aplicacion en Produccion Docker]
         subgraph DOCKER[Contenedor Docker]
             A["Next.js App\n(AppNext/auth y AppNext/Dashboard)"]
             D[API Interna: endpoint api/licitaciones]
@@ -89,6 +89,7 @@ flowchart LR
     SG --> P
     P --> G
     P --> G2
+
 
 
 
