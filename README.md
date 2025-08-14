@@ -39,7 +39,7 @@ flowchart LR
     %% =========================
     %% BLOQUE 1: Desarrollo y Despliegue
     %% =========================
-    subgraph DEV[Desarrollo y Preparacion]
+    subgraph DEV["Desarrollo y Preparacion"]
         B1[Construccion: Dockerfile + Docker Compose + Codigo]
         X[Commit y Push en Git]
         E[Repositorio Git con Codigo y Configuracion]
@@ -49,9 +49,9 @@ flowchart LR
     %% =========================
     %% BLOQUE 2: Aplicacion en Produccion
     %% =========================
-    subgraph APP[Aplicacion en Produccion (Docker)]
-        subgraph DOCKER[Contenedor Docker]
-            subgraph FLOW[Flujo interno de la App]
+    subgraph APP["Aplicacion en Produccion - Docker"]
+        subgraph DOCKER["Contenedor Docker"]
+            subgraph FLOW["Flujo interno de la App"]
                 U[Actor]
                 PWD[Password]
                 AUTH[AppNext/auth]
@@ -81,7 +81,7 @@ flowchart LR
     %% =========================
     %% BLOQUE 3: Infraestructura
     %% =========================
-    subgraph INFRA[Infraestructura]
+    subgraph INFRA["Infraestructura"]
         G[EC2 App-SECOP + Docker: App desplegada]
         PK[Portainer: Gestion local de contenedores en EC2 App-SECOP]
         UK[Uptime Kuma: Monitoreo remoto de EC2 App-SECOP]
@@ -91,7 +91,7 @@ flowchart LR
     %% =========================
     %% BLOQUE 4: Seguridad
     %% =========================
-    subgraph SECURITY[Seguridad y Control de Acceso]
+    subgraph SECURITY["Seguridad y Control de Acceso"]
         SG[Grupos de Seguridad AWS: Reglas entrada/salida]
         P[Puertos: 80 HTTP, 443 HTTPS, 3000 App, 9000 Portainer, 3001 Kuma]
     end
@@ -111,6 +111,7 @@ flowchart LR
     SG --> P
     P --> G
     P --> G2
+
 
 
 
