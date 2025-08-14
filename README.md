@@ -39,30 +39,29 @@ flowchart LR
     %% =========================
     %% BLOQUE 1: Desarrollo y Despliegue
     %% =========================
-    subgraph DEV[Desarrollo y Preparación]
-        B1[Construcción: Dockerfile + Docker Compose + Código]
+    subgraph DEV[Desarrollo y Preparacion]
+        B1[Construccion: Dockerfile + Docker Compose + Codigo]
         X[Commit y Push en Git]
-        E[Repositorio Git con Código y Configuración]
-        F["Ansible - Playbook de Despliegue Local
-        -> Inyección de variables, llaves y secretos vía AWS IAM (cadena conexión Supabase)"]
+        E[Repositorio Git con Codigo y Configuracion]
+        F["Ansible - Playbook de Despliegue Local -> Inyeccion de variables, llaves y secretos via AWS IAM (cadena conexion Supabase)"]
     end
 
     %% =========================
-    %% BLOQUE 2: Aplicación en Producción
+    %% BLOQUE 2: Aplicacion en Produccion
     %% =========================
-    subgraph APP[Aplicación en Producción (Docker)]
+    subgraph APP[Aplicacion en Produccion (Docker)]
         subgraph DOCKER[Contenedor Docker]
             subgraph FLOW[Flujo interno de la App]
                 U[Actor]
                 PWD[Password]
                 AUTH[AppNext/auth]
                 DB[(DB Supabase)]
-                TOKEN[Token válido inicio]
+                TOKEN[Token valido inicio]
                 DASH[AppNext/Dashboard]
-                API1[API scope datos públicos]
+                API1[API scope datos publicos]
                 API2[API externa]
 
-                %% Flujo de autenticación
+                %% Flujo de autenticacion
                 U --> PWD --> AUTH
                 AUTH --> DB
                 DB --> TOKEN --> DASH
@@ -74,7 +73,7 @@ flowchart LR
             end
 
             %% AWS IAM en build
-            IAM[AWS IAM: Inyecta cadena conexión Supabase y secretos]
+            IAM[AWS IAM: Inyecta cadena conexion Supabase y secretos]
             IAM --> AUTH
         end
     end
@@ -84,7 +83,7 @@ flowchart LR
     %% =========================
     subgraph INFRA[Infraestructura]
         G[EC2 App-SECOP + Docker: App desplegada]
-        PK[Portainer: Gestión local de contenedores en EC2 App-SECOP]
+        PK[Portainer: Gestion local de contenedores en EC2 App-SECOP]
         UK[Uptime Kuma: Monitoreo remoto de EC2 App-SECOP]
         G2[EC2 Uptime Kuma]
     end
@@ -112,6 +111,7 @@ flowchart LR
     SG --> P
     P --> G
     P --> G2
+
 
 
 
