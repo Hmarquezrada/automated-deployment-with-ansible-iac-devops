@@ -32,7 +32,7 @@
       git:
         repo: "{{ repo_url }}"
         dest: "{{ project_path }}"
-        version: main
+        version: master
         force: yes
 
     - name: Obtener secreto desde AWS Secrets Manager
