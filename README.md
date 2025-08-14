@@ -40,7 +40,7 @@ flowchart LR
         B1[Construccion: Dockerfile + Docker Compose + Codigo]
         X[Commit y Push en Git]
         E[Repositorio Git con Codigo y Configuracion]
-        F["Ansible - Playbook de Despliegue Local\n→ Inyeccion de variables, claves y secretos via AWS IAM"]
+        F["Ansible - Playbook de Despliegue Local\n-> Inyeccion de variables, claves y secretos via AWS IAM"]
     end
 
     subgraph APP[Aplicacion en Produccion (Docker)]
@@ -89,6 +89,7 @@ flowchart LR
     SG --> P
     P --> G
     P --> G2
+
 
 
 
