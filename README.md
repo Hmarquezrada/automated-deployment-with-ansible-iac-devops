@@ -16,6 +16,12 @@ Sistema web para consulta y análisis de licitaciones públicas del SECOP (Siste
 
 ---
 
+## MVP de la App.
+
+https://secop-licitaciones-datable.vercel.app/
+admin@admin.com
+admin
+
 ## Arquitectura y Flujo de Despliegue
 
 **1. Desarrollo y Backend Integrado**  
