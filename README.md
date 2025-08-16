@@ -16,7 +16,7 @@ Sistema web para consulta y análisis de licitaciones públicas del SECOP (Siste
 
 ---
 
-## Ambiente de desarrollo de la App.
+## Ambiente de desarrollo de la App
 
 https://secop-licitaciones-datable.vercel.app/
 admin@admin.com
