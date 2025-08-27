@@ -56,7 +56,7 @@ export function isSessionValid(session: LocalSession | null): boolean {
 
 // Obtener usuario de la sesión
 export function getUserFromSession(session: LocalSession | null): LocalUser | null {
-  if (isSessionValid(session)) {
+  if (isSessionValid(session) && session) {
     return session.user
   }
   return null
