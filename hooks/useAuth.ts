@@ -1,40 +1,32 @@
 'use client'
 
 import { useAuthContext } from '@/components/AuthProvider'
-import { supabaseAuth } from '@/lib/supabaseAuthClient'
+import { signInLocal } from '@/lib/localAuth'
 import { useRouter } from 'next/navigation'
 
 export function useAuth() {
-  const { user, loading } = useAuthContext()
+  const { user, loading, setSession } = useAuthContext()
   const router = useRouter()
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabaseAuth.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (error) {
-        throw error
-      }
-
-      if (data.user) {
+      const session = signInLocal(email, password)
+      
+      if (session) {
+        setSession(session)
         router.push('/panel')
+        return { data: { user: session.user }, error: null }
+      } else {
+        return { data: null, error: new Error('Credenciales inválidas') }
       }
-
-      return { data, error: null }
     } catch (error) {
-      return { data: null, error }
+      return { data: null, error: error instanceof Error ? error : new Error('Error de autenticación') }
     }
   }
 
   const signOut = async () => {
     try {
-      const { error } = await supabaseAuth.auth.signOut()
-      if (error) {
-        throw error
-      }
+      setSession(null)
       router.push('/login')
     } catch (error) {
       console.error('Error signing out:', error)
